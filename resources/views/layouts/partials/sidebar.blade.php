@@ -39,7 +39,32 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-                <!-- Add more menu items here -->
+
+                <!-- Roles & Permissions Menu -->
+                <li class="nav-item {{ request()->routeIs('roles.*') || request()->routeIs('permissions.*') ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ request()->routeIs('roles.*') || request()->routeIs('permissions.*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-shield-alt"></i>
+                        <p>
+                            Access Management
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ route('roles.index') }}" class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Roles</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('permissions.index') }}" class="nav-link {{ request()->routeIs('permissions.*') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Permissions</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <!-- End Roles & Permissions Menu -->
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
