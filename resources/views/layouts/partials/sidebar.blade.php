@@ -41,8 +41,8 @@
                 </li>
 
                 <!-- Roles & Permissions Menu -->
-                <li class="nav-item {{ request()->routeIs('roles.*') || request()->routeIs('permissions.*') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link {{ request()->routeIs('roles.*') || request()->routeIs('permissions.*') ? 'active' : '' }}">
+                <li class="nav-item {{ request()->routeIs('roles.*') || request()->routeIs('permissions.*') || request()->routeIs('users.*') ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ request()->routeIs('roles.*') || request()->routeIs('permissions.*') || request()->routeIs('users.*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-shield-alt"></i>
                         <p>
                             Access Management
@@ -50,6 +50,14 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
+                        @can('user-list')
+                        <li class="nav-item">
+                            <a href="{{ route('users.index') }}" class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Users</p>
+                            </a>
+                        </li>
+                        @endcan
                         @can('role-list')
                         <li class="nav-item">
                             <a href="{{ route('roles.index') }}" class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }}">
