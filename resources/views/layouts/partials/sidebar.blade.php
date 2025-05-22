@@ -76,6 +76,15 @@
                         @endcan
                     </ul>
                 </li>
+                <!-- Spare Parts Menu -->
+                @can('spare-part-list')
+                <li class="nav-item {{ request()->routeIs('spare-parts.*') ? 'menu-open' : '' }}">
+                    <a href="{{ route('spare-parts.index') }}" class="nav-link {{ request()->routeIs('spare-parts.*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-cogs"></i>
+                        <p>Spare Parts</p>
+                    </a>
+                </li>
+                @endcan
                 <!-- End Roles & Permissions Menu -->
             </ul>
         </nav>

@@ -30,6 +30,10 @@ class UserSeeder extends Seeder
             'permission-create',
             'permission-edit',
             'permission-delete',
+            'spare-part-list',
+            'spare-part-create',
+            'spare-part-edit',
+            'spare-part-delete',
         ];
 
         // Gunakan firstOrCreate untuk menghindari duplicate saat re-run seeder
