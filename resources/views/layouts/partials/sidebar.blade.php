@@ -50,18 +50,22 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
+                        @can('role-list')
                         <li class="nav-item">
                             <a href="{{ route('roles.index') }}" class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Roles</p>
                             </a>
                         </li>
+                        @endcan
+                        @can('permission-list')
                         <li class="nav-item">
                             <a href="{{ route('permissions.index') }}" class="nav-link {{ request()->routeIs('permissions.*') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Permissions</p>
                             </a>
                         </li>
+                        @endcan
                     </ul>
                 </li>
                 <!-- End Roles & Permissions Menu -->

@@ -8,9 +8,11 @@
                 <div class="card-header">
                     <h3 class="card-title">Roles Management</h3>
                     <div class="card-tools">
-                        <a href="{{ route('roles.create') }}" class="btn btn-primary btn-sm">
-                            <i class="fas fa-plus"></i> Create New Role
-                        </a>
+                        @can('role-create')
+                            <a href="{{ route('roles.create') }}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-plus"></i> Create New Role
+                            </a>
+                        @endcan
                     </div>
                 </div>
                 <div class="card-body">
