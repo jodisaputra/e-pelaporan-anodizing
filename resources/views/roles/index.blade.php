@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@section('header', 'Roles Management')
 @section('content')
 <div class="container-fluid">
     <div class="row">
@@ -17,7 +18,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped" id="roles-table">
+                        <table class="table table-bordered table-striped" id="roles-table" style="width: 100%;">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -41,6 +42,7 @@ $(function() {
     $('#roles-table').DataTable({
         processing: true,
         serverSide: true,
+        responsive: true,
         ajax: "{{ route('roles.index') }}",
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},

@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@section('header', 'Edit Permission')
 @section('content')
 <div class="container-fluid">
     <div class="row">

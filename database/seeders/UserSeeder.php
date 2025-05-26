@@ -34,6 +34,10 @@ class UserSeeder extends Seeder
             'spare-part-create',
             'spare-part-edit',
             'spare-part-delete',
+            'action-list',
+            'action-create',
+            'action-edit',
+            'action-delete',
         ];
 
         // Gunakan firstOrCreate untuk menghindari duplicate saat re-run seeder

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('header', 'Edit Spare Part')
 @section('content')
 <div class="container-fluid">
     <div class="row">

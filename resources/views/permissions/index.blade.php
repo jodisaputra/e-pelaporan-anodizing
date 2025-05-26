@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@section('header', 'Permissions Management')
 @section('content')
 <div class="container-fluid">
     <div class="row">
@@ -15,7 +16,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped" id="permissions-table">
+                        <table class="table table-bordered table-striped" id="permissions-table" style="width: 100%;">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -38,6 +39,7 @@ $(function() {
     $('#permissions-table').DataTable({
         processing: true,
         serverSide: true,
+        responsive: true,
         ajax: "{{ route('permissions.index') }}",
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},

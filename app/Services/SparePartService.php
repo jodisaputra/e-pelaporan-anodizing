@@ -96,4 +96,15 @@ class SparePartService
             throw $e;
         }
     }
+
+    /**
+     * Get all spare parts with low stock
+     *
+     * @param int $threshold
+     * @return Collection
+     */
+    public function getLowStockSpareParts(int $threshold = 5): Collection
+    {
+        return SparePart::where('quantity', '<=', $threshold)->get();
+    }
 } 

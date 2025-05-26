@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('header', 'Spare Parts Management')
 @section('content')
 <div class="container-fluid">
     <div class="row">
@@ -16,17 +16,19 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <table class="table table-bordered table-striped" id="spare-parts-table">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Name</th>
-                                <th>Quantity</th>
-                                <th>Description</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped" id="spare-parts-table" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Name</th>
+                                    <th>Quantity</th>
+                                    <th>Description</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -54,6 +56,7 @@ $(function() {
     var table = $('#spare-parts-table').DataTable({
         processing: true,
         serverSide: true,
+        responsive: true,
         ajax: "{{ route('spare-parts.index') }}",
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},

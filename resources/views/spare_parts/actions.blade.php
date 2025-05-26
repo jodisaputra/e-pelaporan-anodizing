@@ -5,7 +5,7 @@
     </a>
     @endcan
     @can('spare-part-delete')
-    <button type="button" class="btn btn-sm btn-danger delete-spare-part" data-id="{{ $sparePart->id }}">
+    <button type="button" class="btn btn-sm btn-danger delete-spare-part ml-2" data-id="{{ $sparePart->id }}">
         <i class="fas fa-trash"></i> Delete
     </button>
     @endcan

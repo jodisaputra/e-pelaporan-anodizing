@@ -106,4 +106,23 @@ class SparePartController extends Controller
             return response()->json(['error' => 'Error deleting spare part: ' . $e->getMessage()], 500);
         }
     }
+
+    /**
+     * Get low stock notifications for AJAX polling
+     */
+    public function getLowStockNotifications(Request $request)
+    {
+        $lowStockSpareParts = $this->sparePartService->getLowStockSpareParts();
+        return response()->json([
+            'count' => $lowStockSpareParts->count(),
+            'items' => $lowStockSpareParts->map(function($sparePart) {
+                return [
+                    'id' => $sparePart->id,
+                    'name' => $sparePart->name,
+                    'quantity' => $sparePart->quantity,
+                    'edit_url' => route('spare-parts.edit', $sparePart->id),
+                ];
+            }),
+        ]);
+    }
 } 

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('header', 'Create New User')
 @section('content')
 <div class="container-fluid">
     <div class="row">
