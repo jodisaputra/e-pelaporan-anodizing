@@ -41,6 +41,7 @@
                 </li>
 
                 <!-- Roles & Permissions Menu -->
+                @if(Auth::user()->hasPermissionTo('user-list') || Auth::user()->hasPermissionTo('role-list') || Auth::user()->hasPermissionTo('permission-list'))
                 <li class="nav-item {{ request()->routeIs('roles.*') || request()->routeIs('permissions.*') || request()->routeIs('users.*') ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link {{ request()->routeIs('roles.*') || request()->routeIs('permissions.*') || request()->routeIs('users.*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-shield-alt"></i>
@@ -76,6 +77,7 @@
                         @endcan
                     </ul>
                 </li>
+                @endif
                 <!-- Spare Parts Menu -->
                 @can('spare-part-list')
                 <li class="nav-item {{ request()->routeIs('spare-parts.*') ? 'menu-open' : '' }}">
@@ -94,6 +96,16 @@
                     </a>
                 </li>
                 @endcan
+                <!-- Machine Report Menu -->
+                @can('machine-report-list')
+                <li class="nav-item {{ request()->routeIs('machine-reports.*') ? 'menu-open' : '' }}">
+                    <a href="{{ route('machine-reports.index') }}" class="nav-link {{ request()->routeIs('machine-reports.*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-file-alt"></i>
+                        <p>Machine Report</p>
+                    </a>
+                </li>
+                @endcan
+                
                 <!-- End Roles & Permissions Menu -->
             </ul>
         </nav>

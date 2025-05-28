@@ -17,7 +17,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $permissions = [
+        $allPermissions = [
             'user-list',
             'user-create',
             'user-edit',
@@ -38,10 +38,36 @@ class UserSeeder extends Seeder
             'action-create',
             'action-edit',
             'action-delete',
+            'machine-report-list',
+            'machine-report-create',
+            'machine-report-edit',
+            'machine-report-delete',
+        ];
+
+        $technicianPermissions = [
+            'spare-part-list',
+            'spare-part-create',
+            'spare-part-edit',
+            'spare-part-delete',
+            'machine-report-list',
+            'spare-part-list',
+        ];
+
+        $operatorPermissions = [
+            'spare-part-list',
+            'spare-part-create',
+            'spare-part-edit',
+            'spare-part-delete',
+            'machine-report-list',
+            'spare-part-list',
+            'machine-report-list',
+            'machine-report-create',
+            'machine-report-edit',
+            'machine-report-delete',
         ];
 
         // Gunakan firstOrCreate untuk menghindari duplicate saat re-run seeder
-        foreach ($permissions as $permission) {
+        foreach ($allPermissions as $permission) {
             Permission::firstOrCreate(['name' => $permission]);
         }
 
@@ -49,7 +75,11 @@ class UserSeeder extends Seeder
         $adminRole = Role::firstOrCreate(['name' => RolesEnum::ADMIN->value]);
         $operatorRole = Role::firstOrCreate(['name' => RolesEnum::OPERATOR->value]);
         $technicianRole = Role::firstOrCreate(['name' => RolesEnum::TECHNICIAN->value]);
-        $adminRole->syncPermissions($permissions); // Gunakan sync untuk update permissions
+
+        //sync permissions to role admin
+        $adminRole->syncPermissions($allPermissions); // Gunakan sync untuk update permissions
+        $technicianRole->syncPermissions($technicianPermissions); // Gunakan sync untuk update permissions
+        $operatorRole->syncPermissions($operatorPermissions); // Gunakan sync untuk update permissions
 
         // Create admin user dengan firstOrCreate untuk menghindari duplicate
         $adminUser = User::firstOrCreate(
@@ -68,8 +98,50 @@ class UserSeeder extends Seeder
             $adminUser->assignRole(RolesEnum::ADMIN->value);
         }
 
+        $operatorUser = User::firstOrCreate(
+            ['email' => 'operator@example.com'], // Unique identifier
+            [
+                'name' => 'Operator',
+                'username' => 'operator',
+                'email' => 'operator@example.com',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(), // Tambahkan email verified
+            ]
+        );
+
+        if (!$operatorUser->hasRole(RolesEnum::OPERATOR->value)) {
+            $operatorUser->assignRole(RolesEnum::OPERATOR->value);
+        }
+
+        $technicianUser = User::firstOrCreate(
+            ['email' => 'technician@example.com'], // Unique identifier
+            [
+                'name' => 'Technician',
+                'username' => 'technician',
+                'email' => 'technician@example.com',
+                'password' => Hash::make('password'),
+                'email_verified_at' => now(), // Tambahkan email verified
+            ]
+        );
+
+        if (!$technicianUser->hasRole(RolesEnum::TECHNICIAN->value)) {
+            $technicianUser->assignRole(RolesEnum::TECHNICIAN->value);
+        }
+
         $this->command->info('Admin user created successfully!');
-        $this->command->info('Username: ' .$adminUser->username);
+        $this->command->info('Username: ' . $adminUser->username);
+        $this->command->info('Password: password');
+
+        $this->command->info('========================================');
+
+        $this->command->info('Operator user created successfully!');
+        $this->command->info('Username: ' . $operatorUser->username);
+        $this->command->info('Password: password');
+
+        $this->command->info('========================================');
+
+        $this->command->info('Technician user created successfully!');
+        $this->command->info('Username: ' . $technicianUser->username);
         $this->command->info('Password: password');
     }
 }

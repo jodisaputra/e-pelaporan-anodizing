@@ -8,26 +8,30 @@
                 <div class="card-header">
                     <h3 class="card-title">Action List</h3>
                     <div class="card-tools">
+                        @can('action-create')
                         <a href="{{ route('actions.create') }}" class="btn btn-primary btn-sm">
                             <i class="fas fa-plus"></i> Add Action
                         </a>
+                        @endcan
                     </div>
                 </div>
                 <div class="card-body">
-                    <table class="table table-bordered table-striped" id="actions-table">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Status</th>
-                                <th>Description</th>
-                                <th>Date</th>
-                                <th>Technician</th>
-                                <th>Spare Part</th>
-                                <th>Quantity</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped" id="actions-table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Status</th>
+                                    <th>Description</th>
+                                    <th>Date</th>
+                                    <th>Technician</th>
+                                    <th>Spare Part</th>
+                                    <th>Quantity</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -41,6 +45,7 @@ $(function() {
     $('#actions-table').DataTable({
         processing: true,
         serverSide: true,
+        responsive: true,
         ajax: '{!! route('actions.index') !!}',
         columns: [
             { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },

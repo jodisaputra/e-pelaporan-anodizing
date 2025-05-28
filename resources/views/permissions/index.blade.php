@@ -9,9 +9,11 @@
                 <div class="card-header">
                     <h3 class="card-title">Permissions Management</h3>
                     <div class="card-tools">
+                        @can('permission-create')
                         <a href="{{ route('permissions.create') }}" class="btn btn-primary btn-sm">
                             <i class="fas fa-plus"></i> Create New Permission
                         </a>
+                        @endcan
                     </div>
                 </div>
                 <div class="card-body">
