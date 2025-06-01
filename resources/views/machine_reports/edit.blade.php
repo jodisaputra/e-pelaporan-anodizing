@@ -19,17 +19,8 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label for="user_id">User</label>
-                            <select class="form-control @error('user_id') is-invalid @enderror" id="user_id" name="user_id">
-                                <option value="">-- Select User --</option>
-                                @foreach($users as $user)
-                                    <option value="{{ $user->id }}" {{ old('user_id', $report->user_id) == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('user_id')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+                            <input type="text" class="form-control" value="{{ Auth::user()->name }}" disabled>
+                            <input type="hidden" name="user_id" value="{{ Auth::id() }}">
                         </div>
                         <div class="form-group">
                             <label for="machine_name">Machine Name</label>
