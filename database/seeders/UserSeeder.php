@@ -46,9 +46,6 @@ class UserSeeder extends Seeder
 
         $technicianPermissions = [
             'spare-part-list',
-            'spare-part-create',
-            'spare-part-edit',
-            'spare-part-delete',
             'machine-report-list',
             'action-list',
             'action-create',
