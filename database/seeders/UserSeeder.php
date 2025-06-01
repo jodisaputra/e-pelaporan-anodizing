@@ -50,7 +50,10 @@ class UserSeeder extends Seeder
             'spare-part-edit',
             'spare-part-delete',
             'machine-report-list',
-            'spare-part-list',
+            'action-list',
+            'action-create',
+            'action-edit',
+            'action-delete',
         ];
 
         $operatorPermissions = [
@@ -58,8 +61,6 @@ class UserSeeder extends Seeder
             'spare-part-create',
             'spare-part-edit',
             'spare-part-delete',
-            'machine-report-list',
-            'spare-part-list',
             'machine-report-list',
             'machine-report-create',
             'machine-report-edit',

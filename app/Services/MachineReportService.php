@@ -95,4 +95,20 @@ class MachineReportService
             throw $e;
         }
     }
+
+    /**
+     * Get machine report detail by ID (with all relations)
+     *
+     * @param int $id
+     * @return MachineReport
+     */
+    public function getMachineReportDetail(int $id): MachineReport
+    {
+        try {
+            return MachineReport::with(['user', 'technician', 'action'])->findOrFail($id);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching machine report detail: ' . $e->getMessage());
+            throw $e;
+        }
+    }
 } 

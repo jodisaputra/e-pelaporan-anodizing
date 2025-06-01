@@ -19,6 +19,7 @@ class StoreMachineReportRequest extends FormRequest
             'report_description' => ['required', 'string'],
             'report_date' => ['required', 'date'],
             'action_id' => ['nullable', 'exists:actions,action_id'],
+            'technician_id' => ['nullable', 'exists:users,id'],
         ];
     }
 
@@ -30,7 +31,8 @@ class StoreMachineReportRequest extends FormRequest
             'machine_name.required' => 'The machine name is required.',
             'report_description.required' => 'The report description is required.',
             'report_date.required' => 'The report date is required.',
-            'action_id.exists' => 'The selected action is invalid.'
+            'action_id.exists' => 'The selected action is invalid.',
+            'technician_id.exists' => 'The selected technician is invalid.'
         ];
     }
 } 

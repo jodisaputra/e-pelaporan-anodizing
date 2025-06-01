@@ -28,4 +28,19 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('machine-reports', MachineReportController::class);
 
     Route::get('/api/low-stock-notifications', [SparePartController::class, 'getLowStockNotifications'])->name('api.low-stock-notifications');
+
+    // Route to get the latest unread notification for the logged-in user
+    Route::get('/notifications/latest', function () {
+        $notification = auth()->user()->unreadNotifications()->latest()->first();
+        return response()->json($notification);
+    });
+
+    // Route to mark a notification as read
+    Route::post('/notifications/mark-as-read/{id}', function ($id) {
+        $notification = auth()->user()->notifications()->find($id);
+        if ($notification) {
+            $notification->markAsRead();
+        }
+        return response()->json(['status' => 'Notification marked as read.']);
+    });
 });

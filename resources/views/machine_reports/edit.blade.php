@@ -59,6 +59,20 @@
                             @enderror
                         </div>
                         <div class="form-group">
+                            <label for="technician_id">Technician</label>
+                            <select class="form-control @error('technician_id') is-invalid @enderror" id="technician_id" name="technician_id">
+                                <option value="">-- Select Technician --</option>
+                                @foreach($technicians as $technician)
+                                    <option value="{{ $technician->id }}" {{ old('technician_id', $report->technician_id) == $technician->id ? 'selected' : '' }}>{{ $technician->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('technician_id')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-group">
                             <label for="action_id">Action</label>
                             <select class="form-control @error('action_id') is-invalid @enderror" id="action_id" name="action_id">
                                 <option value="">-- Select Action --</option>

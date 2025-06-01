@@ -12,6 +12,7 @@ class MachineReport extends Model
         'report_description',
         'report_date',
         'action_id',
+        'technician_id',
     ];
 
     public function user()
@@ -22,5 +23,10 @@ class MachineReport extends Model
     public function action()
     {
         return $this->belongsTo(Action::class, 'action_id');
+    }
+
+    public function technician()
+    {
+        return $this->belongsTo(User::class, 'technician_id');
     }
 } 

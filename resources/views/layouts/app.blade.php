@@ -66,5 +66,31 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     @stack('scripts')
+
+    <script>
+    @if(Auth::check())
+        // Check for the latest unread notification every 30 seconds
+        setInterval(function() {
+            fetch('/notifications/latest')
+                .then(response => response.json())
+                .then(notification => {
+                    if (notification && !notification.read_at) {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'New Machine Report Assigned',
+                            text: notification.data.message,
+                            showConfirmButton: true
+                        }).then(() => {
+                            // Mark notification as read
+                            fetch('/notifications/mark-as-read/' + notification.id, {
+                                method: 'POST',
+                                headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'}
+                            });
+                        });
+                    }
+                });
+        }, 30000); // 30 seconds
+    @endif
+    </script>
 </body>
 </html>

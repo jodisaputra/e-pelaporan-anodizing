@@ -18,10 +18,12 @@ return new class extends Migration
             $table->text('report_description');
             $table->date('report_date');
             $table->unsignedBigInteger('action_id')->nullable();
+            $table->unsignedBigInteger('technician_id')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('action_id')->references('action_id')->on('actions')->onDelete('set null');
+            $table->foreign('technician_id')->references('id')->on('users')->onDelete('set null');
         });
     }
 

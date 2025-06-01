@@ -9,6 +9,8 @@ use App\Models\User;
 use App\Models\Action;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use Spatie\Permission\Models\Role;
+use App\Notifications\MachineReportAssigned;
 
 class MachineReportController extends Controller
 {
@@ -48,16 +50,46 @@ class MachineReportController extends Controller
     {
         $users = User::all();
         $actions = Action::all();
-        return view('machine_reports.create', compact('users', 'actions'));
+        $technicians = User::role('technician')->get();
+        return view('machine_reports.create', compact('users', 'actions', 'technicians'));
     }
 
     public function store(StoreMachineReportRequest $request)
     {
         try {
-            $this->machineReportService->createMachineReport($request->validated());
+            $report = $this->machineReportService->createMachineReport($request->validated());
+            // Kirim notifikasi ke teknisi yang dipilih
+            if ($report->technician_id) {
+                $technician = \App\Models\User::find($report->technician_id);
+                if ($technician) {
+                    \Log::info('Attempting to send email to technician', [
+                        'technician_id' => $technician->id,
+                        'technician_email' => $technician->email,
+                        'report_id' => $report->id
+                    ]);
+                    try {
+                        $technician->notify(new MachineReportAssigned($report));
+                        \Log::info('Email notification sent successfully');
+                    } catch (\Exception $e) {
+                        \Log::error('Failed to send email notification', [
+                            'error' => $e->getMessage(),
+                            'technician_id' => $technician->id,
+                            'report_id' => $report->id
+                        ]);
+                    }
+                } else {
+                    \Log::warning('Technician not found', ['technician_id' => $report->technician_id]);
+                }
+            } else {
+                \Log::info('No technician assigned to report', ['report_id' => $report->id]);
+            }
             return redirect()->route('machine-reports.index')
                 ->with('success', 'Machine report created successfully.');
         } catch (\Exception $e) {
+            \Log::error('Error creating machine report', [
+                'error' => $e->getMessage(),
+                'request_data' => $request->validated()
+            ]);
             return redirect()->back()
                 ->with('error', $e->getMessage())
                 ->withInput();
@@ -73,7 +105,8 @@ class MachineReportController extends Controller
             }
             $users = User::all();
             $actions = Action::all();
-            return view('machine_reports.edit', compact('report', 'users', 'actions'));
+            $technicians = User::role('technician')->get();
+            return view('machine_reports.edit', compact('report', 'users', 'actions', 'technicians'));
         } catch (\Exception $e) {
             return redirect()->route('machine-reports.index')
                 ->with('error', 'Error fetching machine report: ' . $e->getMessage());
@@ -87,10 +120,41 @@ class MachineReportController extends Controller
             if (auth()->id() !== $report->user_id) {
                 abort(403, 'You are not authorized to update this report.');
             }
-            $this->machineReportService->updateMachineReport($id, $request->validated());
+            
+            $oldTechnicianId = $report->technician_id;
+            $report = $this->machineReportService->updateMachineReport($id, $request->validated());
+            
+            // Send notification if technician is assigned or changed
+            if ($report->technician_id && $report->technician_id !== $oldTechnicianId) {
+                $technician = \App\Models\User::find($report->technician_id);
+                if ($technician) {
+                    \Log::info('Attempting to send email to technician for updated report', [
+                        'technician_id' => $technician->id,
+                        'technician_email' => $technician->email,
+                        'report_id' => $report->id
+                    ]);
+                    try {
+                        $technician->notify(new MachineReportAssigned($report));
+                        \Log::info('Email notification sent successfully for updated report');
+                    } catch (\Exception $e) {
+                        \Log::error('Failed to send email notification for updated report', [
+                            'error' => $e->getMessage(),
+                            'technician_id' => $technician->id,
+                            'report_id' => $report->id
+                        ]);
+                    }
+                } else {
+                    \Log::warning('Technician not found for updated report', ['technician_id' => $report->technician_id]);
+                }
+            }
+            
             return redirect()->route('machine-reports.index')
                 ->with('success', 'Machine report updated successfully.');
         } catch (\Exception $e) {
+            \Log::error('Error updating machine report', [
+                'error' => $e->getMessage(),
+                'request_data' => $request->validated()
+            ]);
             return redirect()->back()
                 ->with('error', $e->getMessage())
                 ->withInput();
@@ -109,5 +173,11 @@ class MachineReportController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error deleting machine report: ' . $e->getMessage()], 500);
         }
+    }
+
+    public function show($id)
+    {
+        $report = $this->machineReportService->getMachineReportDetail($id);
+        return view('machine_reports.show', compact('report'));
     }
 } 
