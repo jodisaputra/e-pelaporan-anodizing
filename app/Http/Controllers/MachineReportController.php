@@ -28,14 +28,17 @@ class MachineReportController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $reports = \App\Models\MachineReport::with(['user', 'action'])->select('machine_reports.*');
+            $reports = \App\Models\MachineReport::with(['user', 'actions'])->select('machine_reports.*');
             return DataTables::of($reports)
                 ->addIndexColumn()
                 ->addColumn('user', function ($report) {
                     return $report->user ? $report->user->name : '-';
                 })
                 ->addColumn('action', function ($report) {
-                    return $report->action ? $report->action->action_status : '-';
+                    if ($report->actions && $report->actions->count() > 0) {
+                        return $report->actions->first()->status;
+                    }
+                    return '-';
                 })
                 ->addColumn('actions', function ($report) {
                     return view('machine_reports.actions', compact('report'))->render();

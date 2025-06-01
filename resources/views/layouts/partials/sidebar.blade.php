@@ -87,15 +87,6 @@
                     </a>
                 </li>
                 @endcan
-                <!-- Actions Menu -->
-                @can('action-list')
-                <li class="nav-item {{ request()->routeIs('actions.*') ? 'menu-open' : '' }}">
-                    <a href="{{ route('actions.index') }}" class="nav-link {{ request()->routeIs('actions.*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-tasks"></i>
-                        <p>Actions</p>
-                    </a>
-                </li>
-                @endcan
                 <!-- Machine Report Menu -->
                 @can('machine-report-list')
                 <li class="nav-item {{ request()->routeIs('machine-reports.*') ? 'menu-open' : '' }}">

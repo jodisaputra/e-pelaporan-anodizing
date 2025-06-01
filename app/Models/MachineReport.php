@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class MachineReport extends Model
 {
@@ -11,21 +13,25 @@ class MachineReport extends Model
         'machine_name',
         'report_description',
         'report_date',
-        'action_id',
         'technician_id',
     ];
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function action()
+    public function actions(): BelongsToMany
     {
-        return $this->belongsTo(Action::class, 'action_id');
+        return $this->belongsToMany(
+            Action::class,
+            'machine_report_actions',
+            'machine_report_id',
+            'action_id'
+        )->withTimestamps();
     }
 
-    public function technician()
+    public function technician(): BelongsTo
     {
         return $this->belongsTo(User::class, 'technician_id');
     }

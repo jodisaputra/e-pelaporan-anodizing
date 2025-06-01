@@ -14,27 +14,34 @@ class UpdateActionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'action_status' => ['required', 'string', 'max:255'],
-            'action_description' => ['required', 'string'],
-            'action_date' => ['required', 'date'],
-            'technician_name' => ['required', 'string', 'max:255'],
-            'spare_part_id' => ['required', 'exists:spare_parts,id'],
-            'spare_part_quantity' => ['required', 'integer', 'min:1'],
+            'status' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'date' => ['required', 'date'],
+            'spare_part_id' => ['nullable', 'exists:spare_parts,id'],
+            'quantity' => ['nullable', 'integer', 'min:1'],
+            'images' => ['nullable', 'array'],
+            'images.*' => ['image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'action_status.required' => 'The action status is required.',
-            'action_description.required' => 'The action description is required.',
-            'action_date.required' => 'The action date is required.',
-            'technician_name.required' => 'The technician name is required.',
-            'spare_part_id.required' => 'The spare part is required.',
+            'status.required' => 'The status is required.',
+            'description.required' => 'The description is required.',
+            'date.required' => 'The action date is required.',
             'spare_part_id.exists' => 'The selected spare part is invalid.',
-            'spare_part_quantity.required' => 'The spare part quantity is required.',
-            'spare_part_quantity.integer' => 'The spare part quantity must be a number.',
-            'spare_part_quantity.min' => 'The spare part quantity must be at least 1.'
+            'quantity.integer' => 'The quantity must be a number.',
+            'quantity.min' => 'The quantity must be at least 1.',
+            'images.*.image' => 'Each file must be an image.',
+            'images.*.mimes' => 'Each image must be a file of type: jpeg, png, jpg, gif, svg.',
+            'images.*.max' => 'Each image may not be greater than 2MB.'
         ];
+    }
+
+    public function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        \Log::error('UpdateActionRequest validation failed', $validator->errors()->toArray());
+        parent::failedValidation($validator);
     }
 } 

@@ -25,7 +25,6 @@
                                     <th>Machine Name</th>
                                     <th>Description</th>
                                     <th>Date</th>
-                                    <th>Action Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -52,7 +51,6 @@ $(function() {
             { data: 'machine_name', name: 'machine_name' },
             { data: 'report_description', name: 'report_description' },
             { data: 'report_date', name: 'report_date' },
-            { data: 'action', name: 'action' },
             { data: 'actions', name: 'actions', orderable: false, searchable: false },
         ]
     });

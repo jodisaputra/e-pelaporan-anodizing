@@ -25,9 +25,10 @@
                                     <th>Description</th>
                                     <th>Date</th>
                                     <th>Technician</th>
+                                    <th>Machine Report</th>
                                     <th>Spare Part</th>
                                     <th>Quantity</th>
-                                    <th>Action</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                         </table>
@@ -49,14 +50,69 @@ $(function() {
         ajax: '{!! route('actions.index') !!}',
         columns: [
             { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-            { data: 'action_status', name: 'action_status' },
+            { 
+                data: 'action_status', 
+                name: 'action_status',
+                render: function(data) {
+                    let badgeClass = 'info';
+                    if (data === 'Completed') badgeClass = 'success';
+                    else if (data === 'In Progress') badgeClass = 'warning';
+                    return `<span class="badge badge-${badgeClass}">${data}</span>`;
+                }
+            },
             { data: 'action_description', name: 'action_description' },
             { data: 'action_date', name: 'action_date' },
-            { data: 'technician_name', name: 'technician_name' },
-            { data: 'spare_part', name: 'spare_part' },
-            { data: 'spare_part_quantity', name: 'spare_part_quantity' },
-            { data: 'action', name: 'action', orderable: false, searchable: false },
-        ]
+            { data: 'technician', name: 'technician' },
+            { 
+                data: 'machine_report', 
+                name: 'machine_report',
+                render: function(data) {
+                    if (!data) return '-';
+                    return `<a href="${data.edit_url}" class="text-primary">
+                        <i class="fas fa-link"></i> ${data.machine_name}
+                    </a>`;
+                }
+            },
+            { 
+                data: 'spare_part', 
+                name: 'spare_part',
+                render: function(data) {
+                    if (!data) return '-';
+                    return `<span class="text-muted">${data.name}</span>`;
+                }
+            },
+            { 
+                data: 'spare_part_quantity', 
+                name: 'spare_part_quantity',
+                render: function(data) {
+                    return data || '-';
+                }
+            },
+            { 
+                data: 'actions', 
+                name: 'actions', 
+                orderable: false, 
+                searchable: false,
+                render: function(data) {
+                    return data;
+                }
+            },
+        ],
+        order: [[3, 'desc']], // Sort by date descending by default
+        language: {
+            search: "Search actions:",
+            lengthMenu: "Show _MENU_ actions per page",
+            info: "Showing _START_ to _END_ of _TOTAL_ actions",
+            infoEmpty: "No actions found",
+            infoFiltered: "(filtered from _MAX_ total actions)",
+            zeroRecords: "No matching actions found",
+            paginate: {
+                first: "First",
+                last: "Last",
+                next: "Next",
+                previous: "Previous"
+            }
+        }
     });
 });
 </script>

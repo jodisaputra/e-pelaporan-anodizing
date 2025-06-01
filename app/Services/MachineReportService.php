@@ -105,7 +105,12 @@ class MachineReportService
     public function getMachineReportDetail(int $id): MachineReport
     {
         try {
-            return MachineReport::with(['user', 'technician', 'action'])->findOrFail($id);
+            return MachineReport::with([
+                'user',
+                'technician',
+                'actions.technician',
+                'actions.sparePart'
+            ])->findOrFail($id);
         } catch (\Exception $e) {
             \Log::error('Error fetching machine report detail: ' . $e->getMessage());
             throw $e;

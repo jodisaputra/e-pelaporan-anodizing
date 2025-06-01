@@ -44,3 +44,8 @@ Route::middleware(['auth'])->group(function () {
         return response()->json(['status' => 'Notification marked as read.']);
     });
 });
+
+Route::get('/logtest', function() {
+    \Log::info('Log test berhasil!');
+    return 'Log test done';
+});

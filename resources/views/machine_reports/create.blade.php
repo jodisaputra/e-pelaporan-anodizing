@@ -23,7 +23,7 @@
                         </div>
                         <div class="form-group">
                             <label for="machine_name">Machine Name</label>
-                            <input type="text" class="form-control @error('machine_name') is-invalid @enderror" id="machine_name" name="machine_name" value="{{ old('machine_name') }}">
+                            <input type="text" class="form-control @error('machine_name') is-invalid @enderror" id="machine_name" name="machine_name" value="{{ old('machine_name') }}" required>
                             @error('machine_name')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -32,7 +32,7 @@
                         </div>
                         <div class="form-group">
                             <label for="report_description">Description</label>
-                            <textarea class="form-control @error('report_description') is-invalid @enderror" id="report_description" name="report_description">{{ old('report_description') }}</textarea>
+                            <textarea class="form-control @error('report_description') is-invalid @enderror" id="report_description" name="report_description" required>{{ old('report_description') }}</textarea>
                             @error('report_description')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -41,7 +41,7 @@
                         </div>
                         <div class="form-group">
                             <label for="report_date">Date</label>
-                            <input type="date" class="form-control @error('report_date') is-invalid @enderror" id="report_date" name="report_date" value="{{ old('report_date') }}">
+                            <input type="date" class="form-control @error('report_date') is-invalid @enderror" id="report_date" name="report_date" value="{{ old('report_date', date('Y-m-d')) }}" required>
                             @error('report_date')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -49,28 +49,15 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="technician_id">Technician</label>
+                            <label for="technician_id">Assign Technician</label>
                             <select class="form-control @error('technician_id') is-invalid @enderror" id="technician_id" name="technician_id">
                                 <option value="">-- Select Technician --</option>
                                 @foreach($technicians as $technician)
                                     <option value="{{ $technician->id }}" {{ old('technician_id') == $technician->id ? 'selected' : '' }}>{{ $technician->name }}</option>
                                 @endforeach
                             </select>
+                            <small class="form-text text-muted">Select a technician to handle this report. They will be notified and can add actions later.</small>
                             @error('technician_id')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            <label for="action_id">Action</label>
-                            <select class="form-control @error('action_id') is-invalid @enderror" id="action_id" name="action_id">
-                                <option value="">-- Select Action --</option>
-                                @foreach($actions as $action)
-                                    <option value="{{ $action->action_id }}" {{ old('action_id') == $action->action_id ? 'selected' : '' }}>{{ $action->action_status }}</option>
-                                @endforeach
-                            </select>
-                            @error('action_id')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
