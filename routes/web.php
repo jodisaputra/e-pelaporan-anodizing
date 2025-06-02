@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SparePartController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\MachineReportController;
+use App\Http\Controllers\MachineController;
 
 Route::get('/', function () {
     return view('auth/login');
@@ -26,6 +27,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('actions', ActionController::class);
 
     Route::resource('machine-reports', MachineReportController::class);
+
+    Route::resource('machines', MachineController::class);
 
     Route::get('/api/low-stock-notifications', [SparePartController::class, 'getLowStockNotifications'])->name('api.low-stock-notifications');
 

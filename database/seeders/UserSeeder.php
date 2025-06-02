@@ -42,6 +42,10 @@ class UserSeeder extends Seeder
             'machine-report-create',
             'machine-report-edit',
             'machine-report-delete',
+            'machine-list',
+            'machine-create',
+            'machine-edit',
+            'machine-delete',
         ];
 
         $technicianPermissions = [
@@ -54,6 +58,7 @@ class UserSeeder extends Seeder
             'action-create',
             'action-edit',
             'action-delete',
+            'machine-list',
         ];
 
         $operatorPermissions = [
@@ -62,6 +67,7 @@ class UserSeeder extends Seeder
             'machine-report-create',
             'machine-report-edit',
             'machine-report-delete',
+            'machine-list',
         ];
 
         // Gunakan firstOrCreate untuk menghindari duplicate saat re-run seeder

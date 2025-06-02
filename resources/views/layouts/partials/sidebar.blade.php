@@ -96,7 +96,14 @@
                     </a>
                 </li>
                 @endcan
-                
+                @can('machine-list')
+                <li class="nav-item {{ request()->routeIs('machines.*') ? 'menu-open' : '' }}">
+                    <a href="{{ route('machines.index') }}" class="nav-link {{ request()->routeIs('machines.*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-industry"></i>
+                        <p>Machines</p>
+                    </a>
+                </li>
+                @endcan
                 <!-- End Roles & Permissions Menu -->
             </ul>
         </nav>
