@@ -61,6 +61,20 @@ class MachineReportController extends Controller
     {
         try {
             $report = $this->machineReportService->createMachineReport($request->validated());
+
+            // Handle media upload (for create)
+            if ($request->hasFile('media')) {
+                foreach ($request->file('media') as $file) {
+                    $path = $file->store('machine_report_media', 'public');
+                    $mime = $file->getMimeType();
+                    $type = str_starts_with($mime, 'image') ? 'image' : (str_starts_with($mime, 'video') ? 'video' : 'other');
+                    $report->media()->create([
+                        'file_path' => $path,
+                        'file_type' => $type,
+                    ]);
+                }
+            }
+
             // Kirim notifikasi ke teknisi yang dipilih
             if ($report->technician_id) {
                 $technician = \App\Models\User::find($report->technician_id);
@@ -126,6 +140,19 @@ class MachineReportController extends Controller
             
             $oldTechnicianId = $report->technician_id;
             $report = $this->machineReportService->updateMachineReport($id, $request->validated());
+            
+            // Handle media upload
+            if ($request->hasFile('media')) {
+                foreach ($request->file('media') as $file) {
+                    $path = $file->store('machine_report_media', 'public');
+                    $mime = $file->getMimeType();
+                    $type = str_starts_with($mime, 'image') ? 'image' : (str_starts_with($mime, 'video') ? 'video' : 'other');
+                    $report->media()->create([
+                        'file_path' => $path,
+                        'file_type' => $type,
+                    ]);
+                }
+            }
             
             // Send notification if technician is assigned or changed
             if ($report->technician_id && $report->technician_id !== $oldTechnicianId) {

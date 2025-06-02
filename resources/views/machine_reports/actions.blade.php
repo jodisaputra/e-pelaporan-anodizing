@@ -12,7 +12,7 @@
 
 @if($canViewActions)
     <a href="{{ route('machine-reports.show', $report->id) }}" class="btn btn-sm btn-info">
-        <i class="fas fa-eye"></i> View Actions
+        <i class="fas fa-eye"></i> View
     </a>
 @endif
 

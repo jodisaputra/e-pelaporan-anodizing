@@ -35,4 +35,9 @@ class MachineReport extends Model
     {
         return $this->belongsTo(User::class, 'technician_id');
     }
+
+    public function media()
+    {
+        return $this->hasMany(MachineReportMedia::class);
+    }
 } 

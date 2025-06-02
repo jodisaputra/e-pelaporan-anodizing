@@ -114,7 +114,8 @@ class MachineReportService
                 'user',
                 'technician',
                 'actions.technician',
-                'actions.sparePart'
+                'actions.sparePart',
+                'media'
             ])->findOrFail($id);
         } catch (\Exception $e) {
             \Log::error('Error fetching machine report detail: ' . $e->getMessage());

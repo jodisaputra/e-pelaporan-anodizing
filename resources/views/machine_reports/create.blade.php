@@ -13,7 +13,7 @@
                         </a>
                     </div>
                 </div>
-                <form action="{{ route('machine-reports.store') }}" method="POST">
+                <form action="{{ route('machine-reports.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">
                         <div class="form-group">
@@ -58,6 +58,16 @@
                             </select>
                             <small class="form-text text-muted">Select a technician to handle this report. They will be notified and can add actions later.</small>
                             @error('technician_id')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="media">Upload Images or Videos</label>
+                            <input type="file" class="form-control @error('media') is-invalid @enderror" id="media" name="media[]" multiple accept="image/*,video/*">
+                            <small class="form-text text-muted">You can upload multiple images or videos (max 10MB each).</small>
+                            @error('media')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>

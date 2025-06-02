@@ -25,6 +25,26 @@
                             <p><strong>Technician:</strong> {{ $report->technician ? $report->technician->name : '-' }}</p>
                         </div>
                     </div>
+                    @if($report->media && $report->media->count() > 0)
+                        <hr>
+                        <h5>Media:</h5>
+                        <div class="row">
+                            @foreach($report->media as $media)
+                                <div class="col-md-3 mb-2">
+                                    @if($media->file_type === 'image')
+                                        <img src="{{ asset('storage/' . $media->file_path) }}" class="img-fluid rounded border" style="max-height:120px;">
+                                    @elseif($media->file_type === 'video')
+                                        <video controls style="max-width:100%; max-height:120px;">
+                                            <source src="{{ asset('storage/' . $media->file_path) }}" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    @else
+                                        <a href="{{ asset('storage/' . $media->file_path) }}" target="_blank">Download File</a>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
             </div>
 
@@ -45,6 +65,7 @@
                                             <th>Technician</th>
                                             <th>Spare Part</th>
                                             <th>Quantity</th>
+                                            <th>Report Media</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -75,6 +96,17 @@
                                             <td>{{ $action->technician ? $action->technician->name : '-' }}</td>
                                             <td>{{ $action->sparePart ? $action->sparePart->name : '-' }}</td>
                                             <td>{{ $action->quantity ?? '-' }}</td>
+                                            <td>
+                                                @foreach($report->media as $media)
+                                                    @if($media->file_type === 'image')
+                                                        <img src="{{ asset('storage/' . $media->file_path) }}" style="max-width:40px;max-height:40px;" class="mr-1 mb-1">
+                                                    @elseif($media->file_type === 'video')
+                                                        <video style="max-width:40px;max-height:40px;" controls>
+                                                            <source src="{{ asset('storage/' . $media->file_path) }}" type="video/mp4">
+                                                        </video>
+                                                    @endif
+                                                @endforeach
+                                            </td>
                                             <td>
                                                 @if(Auth::id() === $action->technician_id)
                                                     <a href="{{ route('actions.edit', $action->action_id) }}" class="btn btn-sm btn-warning">
