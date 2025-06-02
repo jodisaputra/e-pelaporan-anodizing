@@ -109,10 +109,10 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="spare_part_quantity">Spare Part Quantity</label>
-                            <input type="number" class="form-control @error('spare_part_quantity') is-invalid @enderror" id="spare_part_quantity" name="spare_part_quantity" value="{{ old('spare_part_quantity', 1) }}" min="1">
+                            <label for="quantity">Spare Part Quantity</label>
+                            <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity" value="{{ old('quantity', 1) }}" min="1">
                             <small class="form-text text-muted">Enter the quantity of spare parts used.</small>
-                            @error('spare_part_quantity')
+                            @error('quantity')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
@@ -147,15 +147,15 @@ $(document).ready(function() {
     // Show/hide spare part quantity based on spare part selection
     $('#spare_part_id').change(function() {
         if ($(this).val()) {
-            $('#spare_part_quantity').prop('required', true);
+            $('#quantity').prop('required', true);
         } else {
-            $('#spare_part_quantity').prop('required', false);
+            $('#quantity').prop('required', false);
         }
     });
 
     // Initialize spare part quantity requirement
     if ($('#spare_part_id').val()) {
-        $('#spare_part_quantity').prop('required', true);
+        $('#quantity').prop('required', true);
     }
 });
 </script>

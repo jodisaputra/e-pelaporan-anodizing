@@ -71,7 +71,8 @@
                 </form>
             </div>
 
-            <!-- Actions Section -->
+            {{-- Actions Section --}}
+            @if(Auth::id() !== $report->user_id)
             <div class="card mt-4">
                 <div class="card-header">
                     <h3 class="card-title">Actions</h3>
@@ -138,6 +139,7 @@
                     @endif
                 </div>
             </div>
+            @endif
         </div>
     </div>
 </div>

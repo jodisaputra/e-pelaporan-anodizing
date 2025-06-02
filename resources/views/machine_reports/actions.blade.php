@@ -1,7 +1,7 @@
 @php
     $isAssignedTechnician = Auth::user()->hasRole('technician') && $report->technician_id === Auth::id();
     $canViewActions = Auth::user()->can('action-list') || $isAssignedTechnician;
-    $canEdit = Auth::id() === $report->user_id || Auth::user()->can('machine-report-edit');
+    $canEdit = Auth::id() === $report->user_id && Auth::user()->can('machine-report-edit');
 @endphp
 
 @if($isAssignedTechnician)

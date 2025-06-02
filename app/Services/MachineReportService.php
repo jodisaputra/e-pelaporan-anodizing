@@ -16,7 +16,7 @@ class MachineReportService
     public function getAllMachineReports(): Collection
     {
         try {
-            return MachineReport::with(['user', 'action'])->get();
+            return MachineReport::with(['user', 'actions'])->get();
         } catch (\Exception $e) {
             Log::error('Error fetching machine reports: ' . $e->getMessage());
             throw $e;
@@ -32,7 +32,12 @@ class MachineReportService
     public function getMachineReportById(int $id): MachineReport
     {
         try {
-            return MachineReport::with(['user', 'action'])->findOrFail($id);
+            return MachineReport::with([
+                'user',
+                'technician',
+                'actions.technician',
+                'actions.sparePart'
+            ])->findOrFail($id);
         } catch (\Exception $e) {
             Log::error('Error fetching machine report by ID: ' . $e->getMessage());
             throw $e;

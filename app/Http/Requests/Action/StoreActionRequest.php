@@ -44,4 +44,18 @@ class StoreActionRequest extends FormRequest
         \Log::error('StoreActionRequest validation failed', $validator->errors()->toArray());
         parent::failedValidation($validator);
     }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $sparePartId = $this->input('spare_part_id');
+            $quantity = $this->input('quantity');
+            if ($sparePartId && $quantity) {
+                $sparePart = \App\Models\SparePart::find($sparePartId);
+                if ($sparePart && $quantity > $sparePart->quantity) {
+                    $validator->errors()->add('quantity', 'The quantity exceeds available stock (' . $sparePart->quantity . ').');
+                }
+            }
+        });
+    }
 } 
