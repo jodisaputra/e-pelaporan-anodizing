@@ -20,10 +20,24 @@
                             <p><strong>Description:</strong> {{ $machine->description }}</p>
                         </div>
                         <div class="col-md-6">
-                            @if($machine->image)
-                                <img src="{{ asset('storage/' . $machine->image) }}" alt="Machine Image" class="img-fluid rounded border" style="max-width:200px;max-height:200px;">
+                            @if($machine->media && $machine->media->count() > 0)
+                                <h5>Media Files:</h5>
+                                <div class="row">
+                                    @foreach($machine->media as $media)
+                                        <div class="col-md-6 mb-3">
+                                            @if($media->file_type === 'image')
+                                                <img src="{{ asset('storage/' . $media->file_path) }}" alt="Machine Image" class="img-fluid rounded border" style="max-height:200px;">
+                                            @elseif($media->file_type === 'video')
+                                                <video controls class="img-fluid rounded border" style="max-height:200px;">
+                                                    <source src="{{ asset('storage/' . $media->file_path) }}" type="video/mp4">
+                                                    Your browser does not support the video tag.
+                                                </video>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                </div>
                             @else
-                                <p><em>No image uploaded.</em></p>
+                                <p><em>No media files uploaded.</em></p>
                             @endif
                         </div>
                     </div>

@@ -11,4 +11,9 @@ class Machine extends Model
         'description',
         'image',
     ];
+
+    public function media()
+    {
+        return $this->hasMany(MachineMedia::class);
+    }
 } 

@@ -35,9 +35,10 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="image">Machine Image</label>
-                            <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image" accept="image/*">
-                            @error('image')
+                            <label for="media">Upload Images or Videos</label>
+                            <input type="file" class="form-control @error('media') is-invalid @enderror" id="media" name="media[]" multiple accept="image/*,video/*">
+                            <small class="form-text text-muted">You can upload multiple images or videos (max 10MB each).</small>
+                            @error('media')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>

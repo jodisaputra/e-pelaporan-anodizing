@@ -40,10 +40,43 @@ class MachineReportController extends Controller
                     }
                     return '-';
                 })
+                ->addColumn('media', function ($report) {
+                    if ($report->media && $report->media->where('file_type', 'image')->count() > 0) {
+                        $images = $report->media->where('file_type', 'image')->take(3);
+                        $html = '<div class="d-flex gap-1">';
+                        foreach ($images as $media) {
+                            $html .= '<a href="' . asset('storage/' . $media->file_path) . '" 
+                                    data-lightbox="report-' . $report->id . '" 
+                                    data-title="' . $report->machine_name . '">
+                                    <img src="' . asset('storage/' . $media->file_path) . '" 
+                                    alt="Report Image" 
+                                    class="rounded border" 
+                                    style="width:40px;height:40px;object-fit:cover;">
+                                </a>';
+                        }
+                        if ($report->media->where('file_type', 'image')->count() > 3) {
+                            $remainingImages = $report->media->where('file_type', 'image')->skip(3);
+                            foreach ($remainingImages as $media) {
+                                $html .= '<a href="' . asset('storage/' . $media->file_path) . '" 
+                                        data-lightbox="report-' . $report->id . '" 
+                                        data-title="' . $report->machine_name . '" 
+                                        style="display:none;">
+                                    </a>';
+                            }
+                            $html .= '<div class="bg-secondary text-white rounded border d-flex align-items-center justify-content-center" 
+                                    style="width:40px;height:40px;font-size:12px;">+' . 
+                                    ($report->media->where('file_type', 'image')->count() - 3) . 
+                                    '</div>';
+                        }
+                        $html .= '</div>';
+                        return $html;
+                    }
+                    return '-';
+                })
                 ->addColumn('actions', function ($report) {
                     return view('machine_reports.actions', compact('report'))->render();
                 })
-                ->rawColumns(['actions'])
+                ->rawColumns(['actions', 'media'])
                 ->make(true);
         }
         return view('machine_reports.index');
@@ -209,5 +242,40 @@ class MachineReportController extends Controller
     {
         $report = $this->machineReportService->getMachineReportDetail($id);
         return view('machine_reports.show', compact('report'));
+    }
+
+    public function destroyMedia($mediaId)
+    {
+        try {
+            $media = \App\Models\MachineReportMedia::findOrFail($mediaId);
+            $report = $media->machineReport;
+            
+            // Check if user is authorized to delete the media
+            if (auth()->id() !== $report->user_id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'You are not authorized to delete this media file.'
+                ], 403);
+            }
+            
+            // Delete the file from storage
+            if (\Storage::disk('public')->exists($media->file_path)) {
+                \Storage::disk('public')->delete($media->file_path);
+            }
+            
+            // Delete the media record
+            $media->delete();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Media file deleted successfully'
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error deleting media file: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete media file: ' . $e->getMessage()
+            ], 500);
+        }
     }
 } 

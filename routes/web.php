@@ -46,6 +46,12 @@ Route::middleware(['auth'])->group(function () {
         }
         return response()->json(['status' => 'Notification marked as read.']);
     });
+
+    Route::delete('/machine-reports/media/{mediaId}', [MachineReportController::class, 'destroyMedia'])
+        ->name('machine-reports.media.destroy');
+
+    Route::delete('/machines/media/{mediaId}', [MachineController::class, 'destroyMedia'])
+        ->name('machines.media.destroy');
 });
 
 Route::get('/logtest', function() {

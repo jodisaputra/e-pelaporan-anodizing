@@ -65,7 +65,40 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="media">Upload Images or Videos</label>
+                            <label>Current Media Files</label>
+                            @if($report->media && $report->media->count() > 0)
+                                <div class="row">
+                                    @foreach($report->media as $media)
+                                        <div class="col-md-3 mb-2">
+                                            @if($media->file_type === 'image')
+                                                <div class="position-relative">
+                                                    <img src="{{ asset('storage/' . $media->file_path) }}" class="img-fluid rounded border" style="max-height:120px;">
+                                                    <button type="button" class="btn btn-danger btn-sm position-absolute" style="top: 5px; right: 5px;" 
+                                                            onclick="deleteMedia({{ $media->id }})">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </div>
+                                            @elseif($media->file_type === 'video')
+                                                <div class="position-relative">
+                                                    <video controls style="max-width:100%; max-height:120px;">
+                                                        <source src="{{ asset('storage/' . $media->file_path) }}" type="video/mp4">
+                                                        Your browser does not support the video tag.
+                                                    </video>
+                                                    <button type="button" class="btn btn-danger btn-sm position-absolute" style="top: 5px; right: 5px;"
+                                                            onclick="deleteMedia({{ $media->id }})">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </div>
+                                            @endif
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @else
+                                <p class="text-muted">No media files uploaded yet.</p>
+                            @endif
+                        </div>
+                        <div class="form-group">
+                            <label for="media">Upload New Images or Videos</label>
                             <input type="file" class="form-control @error('media') is-invalid @enderror" id="media" name="media[]" multiple accept="image/*,video/*">
                             <small class="form-text text-muted">You can upload multiple images or videos (max 10MB each).</small>
                             @error('media')
@@ -205,5 +238,38 @@ $(document).ready(function() {
         });
     });
 });
+
+function deleteMedia(mediaId) {
+    if (confirm('Are you sure you want to delete this media file?')) {
+        fetch(`/machine-reports/media/${mediaId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Remove the media element from the DOM
+                const mediaElement = document.querySelector(`[data-media-id="${mediaId}"]`);
+                if (mediaElement) {
+                    mediaElement.closest('.col-md-3').remove();
+                }
+                // Show success message
+                Swal.fire('Success', 'Media file deleted successfully', 'success');
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            } else {
+                throw new Error(data.message || 'Failed to delete media file');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire('Error', error.message || 'Failed to delete media file', 'error');
+        });
+    }
+}
 </script>
 @endpush 

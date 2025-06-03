@@ -8,17 +8,17 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('machines', function (Blueprint $table) {
+        Schema::create('machine_media', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description')->nullable();
-            $table->string('image')->nullable();
+            $table->foreignId('machine_id')->constrained('machines')->onDelete('cascade');
+            $table->string('file_path');
+            $table->string('file_type', 20); // image, video
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('machines');
+        Schema::dropIfExists('machine_media');
     }
 }; 

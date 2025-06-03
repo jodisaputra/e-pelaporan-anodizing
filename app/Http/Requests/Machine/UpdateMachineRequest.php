@@ -16,7 +16,7 @@ class UpdateMachineRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
-            'image' => ['nullable', 'image', 'max:10240'], // max 10MB
+            'media.*' => ['nullable', 'file', 'mimes:jpeg,png,jpg,gif,mp4,mov,avi', 'max:10240'], // max 10MB
         ];
     }
 } 
