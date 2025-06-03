@@ -10,6 +10,7 @@
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
         <!-- Notification Bell for Low Stock -->
+        @role('admin')
         <li class="nav-item dropdown">
             <a class="nav-link" data-toggle="dropdown" href="#">
                 <i class="far fa-bell"></i>
@@ -33,6 +34,7 @@
                 @endif
             </div>
         </li>
+        @endrole
         <!-- User Dropdown Menu Simple -->
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
